@@ -1,7 +1,9 @@
+// lib/main.dart (original)
 import 'package:flutter/material.dart';
-import 'pages/login_page.dart';
-import 'pages/home_page.dart';
-import 'pages/register_page.dart';
+import 'package:studyflow/pages/login_page.dart';
+import 'package:studyflow/pages/register_page.dart';
+import 'package:studyflow/pages/home_page.dart';
+import 'package:studyflow/models/user_model.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,16 +18,22 @@ class MyApp extends StatelessWidget {
       title: 'StudyFlow',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2563EB)),
         useMaterial3: true,
-        fontFamily: 'Roboto',
       ),
-      // Rotas nomeadas configuradas aqui
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginPage(),
-        '/home': (context) => const HomePage(),
         '/register': (context) => const RegisterPage(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/home') {
+          final user = settings.arguments as User;
+          return MaterialPageRoute(
+            builder: (_) => HomePage(user: user),
+          );
+        }
+        return null;
       },
     );
   }
